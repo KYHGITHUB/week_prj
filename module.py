@@ -36,11 +36,10 @@ def toNan(df):
 def toDateTime(val):
     return datetime.strptime(val, '%Y-%m-%d %H:%M')
 
-def addDayNight(df, day):
-    df_index = df.index.hour.unique()
-    for hour in df_index:
-        for day_, hour_ in day.items():
-            if hour in hour_:
-                df.loc[df.index.hour == hour, 'DAY'] = day_
+def groupDay(df, new_column):
+    df[new_column] = pd.cut(df.index.hour,
+       bins = [0, 6, 10, 18, 22, 24],
+       labels = ['새벽', '아침', '낮', '저녁', '밤'],
+       include_lowest=True)
     return df
 
